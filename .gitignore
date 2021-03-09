@@ -1,0 +1,8 @@
+vendor/
+maskit.sh
+faker.php
+composer.json
+composer.lock
+data/*
+sqlpad/*
+.idea/

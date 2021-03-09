@@ -1,0 +1,20 @@
+datadir="/var/lib/proxysql"
+
+admin_variables=
+{
+    admin_credentials="admin:admin;radmin:radmin"
+    mysql_ifaces="0.0.0.0:6032"
+}
+
+mysql_variables =
+{
+	interfaces="0.0.0.0:3306"
+	monitor_username="root"
+	monitor_password="secret"
+	server_version="5.7.33"
+	monitor_connect_interval="2000"
+	monitor_ping_interval="2000"
+	monitor_read_only_interval="2000"
+	log_unhealthy_connections="false"
+	client_multi_statements="false"
+}
