@@ -40,7 +40,7 @@ then
   echo "       -c to specify a column,"
   echo "       -d to specify the schema"
   echo "       -o to specify obfuscation format"
-  echo "          example -o 'phone' or 'card' or 'string'...."
+  echo "          example -o 'text' or 'text:small' or 'text:regular' or 'text:medium' or 'text:long' or 'password' or 'email' or 'cpf' or 'rg' or 'phone' and 'phone:br'"
   echo "       -t to specify a table where select * is not allowed"
   exit 1
 fi
