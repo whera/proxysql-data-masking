@@ -25,6 +25,7 @@ CPF_MASK='\1CONCAT(LEFT(\2:column,3),REPEAT("*",6),RIGHT(\2:column,2))\3 :column
 RG_MASK='\1CONCAT(LEFT(\2:column, 2),REPEAT("*", CHAR_LENGTH(\2:column)-4),RIGHT(\2:column,2))\3 :column\4'
 PHONE_BR_MASK='\1CONCAT("(",LEFT(REPLACE(REPLACE(\2:column, "(", ""), ")", ""),2),") ",REPEAT("*",5),RIGHT(\2:column,4))\3 :column\4'
 CEP_MASK='\1CONCAT(LEFT(REPLACE(REPLACE(\2:column, ".", ""), "-", ""),2), "***-", RIGHT(\2:column, 3))\3 :column\4'
+CREDIT_CARD='\1CONCAT(LEFT(REPLACE(\2:column, "-", ""), 4), "-****-****-", RIGHT(REPLACE(\2:column, "-", ""), 4))\3 :column\4'
 
 
 which mysqladmin >/dev/null 2>&1
@@ -41,7 +42,7 @@ then
   echo "       -c to specify a column,"
   echo "       -d to specify the schema"
   echo "       -o to specify obfuscation format"
-  echo "          example -o 'text' or 'text:small' or 'text:regular' or 'text:medium' or 'text:long' or 'password' or 'email' or 'cpf' or 'rg' or 'cep' or 'phone' and 'phone:br'"
+  echo "          example -o 'text' or 'text:small' or 'text:regular' or 'text:medium' or 'text:long' or 'password' or 'email' or 'cpf' or 'rg' or 'cep' or 'card:credit' or 'phone' and 'phone:br'"
   echo "       -t to specify a table where select * is not allowed"
   exit 1
 fi
@@ -114,6 +115,9 @@ if [ "$FORMAT_TYPE" != "" ]; then
     "cep")
       FORMAT_RULE=$CEP_MASK
       ;;
+    "card:credit")
+      FORMAT_RULE=$CREDIT_CARD
+      ;;
     *)
       echo "Invalid format: $FORMAT_TYPE"
       exit 1
@@ -158,7 +162,7 @@ if [ "$TABLE" != "" ]; then
 
   mysql -BN -u ${proxy_user} -h ${proxy_host} -P${proxy_port} \
     -e "INSERT INTO mysql_query_rules (active,schemaname,username,match_pattern,error_msg,re_modifiers)
-    VALUES (1,'${DATABASE}','${username}','^SELECT\s+${TABLE}\.\*.*FROM.*${TABLE}',
+    VALUES (1,'${DATABASE}','${username}','^SELECT\s+${TABLE}\.\*.*\s+FROM.*\s+${TABLE}',
     '${MSG_NOT_ALLOWED}','caseless,global' );"
 
   mysql -BN -u ${proxy_user} -h ${proxy_host} -P${proxy_port} \
