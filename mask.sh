@@ -171,7 +171,7 @@ if [ "$TABLE" != "" ]; then
 
   mysql -BN -u ${proxy_user} -h ${proxy_host} -P${proxy_port} \
     -e "INSERT INTO mysql_query_rules (active,schemaname,username,match_pattern,error_msg,re_modifiers)
-    VALUES (1,'${DATABASE}','${username}','^SELECT\s+(\w+)\.\*.*FROM.*${TABLE}\s+(as\s+)?(\1)',
+    VALUES (1,'${DATABASE}','${username}','^SELECT\s+(\w+)\.\*.*\s+FROM.*\s+${TABLE}\s+(as\s+)?(\1)',
     '${MSG_NOT_ALLOWED}','caseless,global' );"
 fi
 
