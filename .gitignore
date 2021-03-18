@@ -6,3 +6,4 @@ composer.lock
 data/*
 sqlpad/*
 .idea/
+config.cnf

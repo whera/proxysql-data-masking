@@ -1,11 +1,20 @@
 #!/bin/bash
 
-export MYSQL_PWD=radmin
-proxy_user=radmin
-proxy_port=6032
-proxy_host=127.0.0.1
-username=proxysql
+root_path=$(pwd);
+exist_config_file=$(ls $root_path/config.cnf 2> /dev/null |wc -l);
 
+
+if [ "$exist_config_file" != "1" ]
+then
+  echo "config file not fount \"config.cnf\"";
+  exit 2
+fi
+
+export MYSQL_PWD=$(awk '/^password/ {print $3; exit}' config.cnf)
+proxy_user=$(awk '/^user/ {print $3; exit}' config.cnf)
+proxy_port=$(awk '/^port/ {print $3; exit}' config.cnf)
+proxy_host=$(awk '/^host/ {print $3; exit}' config.cnf)
+username=$(awk '/^db_user/ {print $3; exit}' config.cnf)
 
 TABLE=""
 DATABASE=""
@@ -13,7 +22,7 @@ COLUMN=""
 FORMAT_TYPE=""
 FORMAT_RULE="";
 
-MSG_NOT_ALLOWED="Consulta não permitida devido a informações sensíveis, entre em contato pelo e-mail: ronaldo@whera.com.br"
+MSG_NOT_ALLOWED="Consulta não permitida devido a informações sensíveis, entre em contato pelo e-mail: ronaldo.rodrigues@tecnofit.com.br"
 
 TEXT_SMALL_MASK='\1CONCAT(LEFT(\2:column, 1), REPEAT("*", CHAR_LENGTH(\2:column)-2), RIGHT(\2:column, 1))\3 :column\4'
 TEXT_REGULAR_MASK='\1CONCAT(LEFT(\2:column, 2), REPEAT("*", CHAR_LENGTH(\2:column)-4), RIGHT(\2:column, 2))\3 :column\4'
