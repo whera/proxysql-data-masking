@@ -152,11 +152,18 @@ if [ "$FORMAT_RULE" != "" ]; then
       VALUES
       (1,'${DATABASE}','${username}','\`*${COLUMN}*\`','${COLUMN}',0,'caseless,global');"
 
+#  mysql -BN -u ${proxy_user} -h ${proxy_host} -P${proxy_port} \
+#  	-e "INSERT INTO mysql_query_rules
+#        (active,schemaname,username,match_pattern,replace_pattern,apply,re_modifiers)
+#        VALUES
+#        (1,'${DATABASE}','${username}','(\(?)(\`?\w+\`?\.)?${COLUMN}(\)?)(?= ?+[^=])([ ,\n])','${FORMAT_RULE}',0,'caseless,global');"
+
+
   mysql -BN -u ${proxy_user} -h ${proxy_host} -P${proxy_port} \
   	-e "INSERT INTO mysql_query_rules
         (active,schemaname,username,match_pattern,replace_pattern,apply,re_modifiers)
         VALUES
-        (1,'${DATABASE}','${username}','(\(?)(\`?\w+\`?\.)?${COLUMN}(\)?)(?= ?+[^=])([ ,\n])','${FORMAT_RULE}',0,'caseless,global');"
+        (1,'${DATABASE}','${username}','(\(?)(\`?\w+\`?\.)?${COLUMN}(\)?)(?= ?+[^=])(?= ?+[^RLIKE])(?= ?+[^REGEXP])(?= ?+[^LIKE])(?= ?+[^MATCH])(?= ?+[^BETWEEN])(?= ?+[^IS])(?= ?+[^<])(?= ?+[^>])(?= ?+[^\!])([ ,\n])','${FORMAT_RULE}',0,'caseless,global');"
 
   mysql -BN -u ${proxy_user} -h ${proxy_host} -P${proxy_port} \
     -e "INSERT INTO mysql_query_rules

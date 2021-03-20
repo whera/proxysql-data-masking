@@ -7,3 +7,5 @@ data/*
 sqlpad/*
 .idea/
 config.cnf
+config-prod.cnf
+config-local.cnf
